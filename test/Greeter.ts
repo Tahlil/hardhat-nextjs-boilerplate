@@ -7,7 +7,7 @@ import {Greeter} from '../typechain/Greeter';
 
 const {deployContract} = waffle;
 
-describe("Greeter test", function () {
+describe("Greeter tests", function () {
   // We define a fixture to reuse the same setup in every test.
   // We use loadFixture to run this setup once, snapshot that state,
   // and reset Hardhat Network to that snapshopt in every test.
@@ -22,14 +22,17 @@ describe("Greeter test", function () {
   }
 
   describe("Test suite", function () {
-    it("Test 1", async function () {
+    it("Check if intiated with hello world", async function () {
       const { greeter, owner } = await loadFixture(deployOnceFixture);
-      expect(true);
+      
+      expect(await greeter.greet()).to.be.eq("Hello, world!");
     });
 
-    it("Test 2", async function () {
+    it("Check if greet can be updated", async function () {
       const { greeter, owner } = await loadFixture(deployOnceFixture);
-      expect(1).to.equal(1);
+      let tx = await greeter.setGreeting("Hello, universe!");
+      (await tx).wait();
+      expect(await greeter.greet()).to.be.eq("Hello, universe!");
     });
 
 
