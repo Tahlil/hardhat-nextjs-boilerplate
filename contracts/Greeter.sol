@@ -5,6 +5,12 @@ import "hardhat/console.sol";
 
 contract Greeter {
     string private greeting;
+    address private _owner;
+
+    modifier onlyOwner() {
+        require(msg.sender == _owner, "Not an owner");
+        _;
+    }
 
     constructor(string memory _greeting) {
         console.log("Deploying a Greeter with greeting:", _greeting);
@@ -15,7 +21,7 @@ contract Greeter {
         return greeting;
     }
 
-    function setGreeting(string memory _greeting) public {
+    function setGreeting(string memory _greeting) public onlyOwner {
         console.log("Changing greeting from '%s' to '%s'", greeting, _greeting);
         greeting = _greeting;
     }
