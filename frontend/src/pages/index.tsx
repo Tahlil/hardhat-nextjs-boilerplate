@@ -43,7 +43,7 @@ function Header() {
 function Main() {
   
   // greeter.greet
-  
+  const [greet, setgreet] = useState("Hi");
   let contract;
   async function checkIfWalletIsConnected() {
     const { ethereum } = window
@@ -58,6 +58,7 @@ function Main() {
     
     contract = Greeter__factory.connect(data.contractAddress, signer);
     console.log(await contract.greet());
+    setgreet(await contract.greet() as string);
   }
   useEffect(() => {
     checkIfWalletIsConnected();
@@ -187,19 +188,19 @@ function Main() {
 
                             
                              <img
-                                    src="https://res.cloudinary.com/easycode/image/upload/v1655738921/Logo/Logo_transparent_vbriwo.png"
+                                    src="https://media.istockphoto.com/photos/hand-is-turning-a-dice-and-changes-the-word-meet-to-greet-picture-id1084115310?k=20&m=1084115310&s=612x612&w=0&h=TwrnLk7i0jdfixAxbJdd8_LF9ZOnkvM-1DGn-_VELHA="
                                     alt="EasyCode"
-                                    className="w-1/2 object-cover"
+                                    className="w-100 object-cover"
                                 />
 
                     </div>
                     <div className="grid grid-cols-4">
                         <div className="p-4 pr-0 text-lg col-span-3">
                                 <h4 className="font-bold">
-                                 Current   Greetings:
+                                 Current Greetings:
                                 </h4>
 
-                                <p>EasyCode will code you a modern and professional website.</p>
+                                <p>{greet}</p>
                         </div>
                     
                     </div>
