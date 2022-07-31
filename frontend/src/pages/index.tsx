@@ -44,7 +44,11 @@ function Main() {
 
   // greeter.greet
   const [greet, setgreet] = useState("Hi");
+  const [currentValue, setCurrentValue] = useState("");
+
   let contract;
+
+
   async function checkIfWalletIsConnected() {
     const { ethereum } = window
     if (ethereum) {
@@ -60,10 +64,21 @@ function Main() {
     console.log(await contract.greet());
     setgreet(await contract.greet() as string);
   }
+
   useEffect(() => {
     checkIfWalletIsConnected();
   }, [])
   console.log(data.contractAddress);
+
+  async function setGreetings() {
+
+  }
+
+  function handleChange(evt) {
+    console.log(evt.currentTarget.value);
+
+    setCurrentValue(evt.currentTarget.value);
+  }
 
 
   const { address, isConnected, connector } = useAccount()
@@ -206,7 +221,9 @@ function Main() {
               </div>
               <div>
                 <form className="m-4 flex">
-                  <input className="rounded-l-lg p-4 border-t mr-0 border-b border-l text-gray-800 border-gray-200 bg-white" placeholder="Enter new greet" />
+                  <input value={currentValue}
+                    onChange={(evt) => handleChange(evt)}
+                    className="rounded-l-lg p-4 border-t mr-0 border-b border-l text-gray-800 border-gray-200 bg-white" placeholder="Enter new greet" />
                   <button className="px-8 rounded-r-lg bg-yellow-400  text-gray-800 font-bold p-4 uppercase border-yellow-500 border-t border-b border-r">Set Greet</button>
                 </form>
               </div>
