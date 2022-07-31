@@ -1,4 +1,5 @@
 import styles from 'styles/Home.module.scss'
+import data from '../info/data.json';
 import ThemeToggleButton from 'components/Theme/ThemeToggleButton'
 import ThemeToggleList from 'components/Theme/ThemeToggleList'
 import { useState } from 'react'
@@ -7,6 +8,8 @@ import ConnectWallet from 'components/Connect/ConnectWallet'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { useConnectModal, useAccountModal, useChainModal } from '@rainbow-me/rainbowkit'
 import { useSignMessage } from 'wagmi'
+import GreeterArtifact from '../../../artifacts/contracts/Greeter.sol/Greeter.json';
+import {Greeter} from '../../../typechain/Greeter';
 
 export default function Home() {
   return (
@@ -37,6 +40,10 @@ function Header() {
 }
 
 function Main() {
+  let greeter: Greeter;
+
+  console.log(data.contractAddress);
+  
   const { address, isConnected, connector } = useAccount()
   const { chain, chains } = useNetwork()
   const { isLoading: isNetworkLoading, pendingChainId, switchNetwork } = useSwitchNetwork()
@@ -140,6 +147,50 @@ function Main() {
           <dd className="break-all">{address ? <SignMsg /> : 'n/a'} </dd>
         </dl>
       </div>
+      {address && (
+        <div className='flex items-center justify-center min-h-screen from-teal-100 via-teal-300 to-teal-500 bg-gradient-to-br w-screen'>
+        <div className="flex flex-col items-center justify-center relative">
+
+                <div
+                    id="partnerCard"
+                    className="bg-[#1c1c1c] text-gray-50 overflow-hidden rounded-md max-w-sm p-2 min-h-[500px] flex flex-col"
+                >
+                    <div>
+                        <h3 className="text-left pl-8 pb-4 pt-2 text-xl">
+                            Greeting App
+                        </h3>
+                    </div>
+
+                    <div className="flex items-center justify-center bg-[#2a2a2a] min-h-[200px]">
+
+                            
+                             <img
+                                    src="https://res.cloudinary.com/easycode/image/upload/v1655738921/Logo/Logo_transparent_vbriwo.png"
+                                    alt="EasyCode"
+                                    className="w-1/2 object-cover"
+                                />
+
+                    </div>
+                    <div className="grid grid-cols-4">
+                        <div className="p-4 pr-0 text-lg col-span-3">
+                                <h4 className="font-bold">
+                                 Current   Greetings:
+                                </h4>
+
+                                <p>EasyCode will code you a modern and professional website.</p>
+                        </div>
+                    
+                    </div>
+
+                    
+                </div>
+
+        </div>
+</div>
+      )
+      
+
+      }
     </main>
   )
 }
