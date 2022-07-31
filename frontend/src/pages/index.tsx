@@ -1,15 +1,16 @@
 import styles from 'styles/Home.module.scss'
 import data from '../info/data.json';
+import { ethers } from 'ethers'
 import ThemeToggleButton from 'components/Theme/ThemeToggleButton'
 import ThemeToggleList from 'components/Theme/ThemeToggleList'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNetwork, useSwitchNetwork, useAccount, useBalance } from 'wagmi'
 import ConnectWallet from 'components/Connect/ConnectWallet'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { useConnectModal, useAccountModal, useChainModal } from '@rainbow-me/rainbowkit'
 import { useSignMessage } from 'wagmi'
-import GreeterArtifact from '../../../artifacts/contracts/Greeter.sol/Greeter.json';
-import {Greeter} from '../../../typechain/Greeter';
+// import GreeterArtifact from '../../../artifacts/contracts/Greeter.sol/Greeter.json';
+import {Greeter__factory} from '../typechain';
 
 export default function Home() {
   return (
@@ -40,9 +41,29 @@ function Header() {
 }
 
 function Main() {
-  let greeter: Greeter;
-
+  
+  // greeter.greet
+  
+  let contract;
+  async function checkIfWalletIsConnected() {
+    const { ethereum } = window
+		if (ethereum) {
+			console.log('Got the ethereum obejct: ', ethereum)
+		} else {
+			console.log('No Wallet found. Connect Wallet')
+		}
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    console.log("Signer", signer);
+    
+    contract = Greeter__factory.connect(data.contractAddress, signer);
+    console.log(await contract.greet());
+  }
+  useEffect(() => {
+    checkIfWalletIsConnected();
+  }, [])
   console.log(data.contractAddress);
+  
   
   const { address, isConnected, connector } = useAccount()
   const { chain, chains } = useNetwork()
@@ -50,6 +71,7 @@ function Main() {
   const { data: balance, isLoading: isBalanceLoading } = useBalance({
     addressOrName: address,
   })
+
   const { openConnectModal } = useConnectModal()
   const { openAccountModal } = useAccountModal()
   const { openChainModal } = useChainModal()
@@ -197,6 +219,7 @@ function Main() {
 
 function SignMsg() {
   const [msg, setMsg] = useState('Dapp Starter')
+  
   const { data, isError, isLoading, isSuccess, signMessage } = useSignMessage({
     message: msg,
   })
@@ -243,3 +266,7 @@ function Footer() {
     </footer>
   )
 }
+function addressOrName(address: string, addressOrName: any) {
+  throw new Error('Function not implemented.');
+}
+
