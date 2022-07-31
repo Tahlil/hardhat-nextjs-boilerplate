@@ -10,7 +10,7 @@ import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { useConnectModal, useAccountModal, useChainModal } from '@rainbow-me/rainbowkit'
 import { useSignMessage } from 'wagmi'
 // import GreeterArtifact from '../../../artifacts/contracts/Greeter.sol/Greeter.json';
-import {Greeter__factory} from '../typechain';
+import { Greeter__factory } from '../typechain';
 
 export default function Home() {
   return (
@@ -41,21 +41,21 @@ function Header() {
 }
 
 function Main() {
-  
+
   // greeter.greet
   const [greet, setgreet] = useState("Hi");
   let contract;
   async function checkIfWalletIsConnected() {
     const { ethereum } = window
-		if (ethereum) {
-			console.log('Got the ethereum obejct: ', ethereum)
-		} else {
-			console.log('No Wallet found. Connect Wallet')
-		}
+    if (ethereum) {
+      console.log('Got the ethereum obejct: ', ethereum)
+    } else {
+      console.log('No Wallet found. Connect Wallet')
+    }
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     console.log("Signer", signer);
-    
+
     contract = Greeter__factory.connect(data.contractAddress, signer);
     console.log(await contract.greet());
     setgreet(await contract.greet() as string);
@@ -64,8 +64,8 @@ function Main() {
     checkIfWalletIsConnected();
   }, [])
   console.log(data.contractAddress);
-  
-  
+
+
   const { address, isConnected, connector } = useAccount()
   const { chain, chains } = useNetwork()
   const { isLoading: isNetworkLoading, pendingChainId, switchNetwork } = useSwitchNetwork()
@@ -172,46 +172,51 @@ function Main() {
       </div>
       {address && (
         <div className='flex items-center justify-center min-h-screen from-teal-100 via-teal-300 to-teal-500 bg-gradient-to-br w-screen'>
-        <div className="flex flex-col items-center justify-center relative">
+          <div className="flex flex-col items-center justify-center relative">
 
-                <div
-                    id="partnerCard"
-                    className="bg-[#1c1c1c] text-gray-50 overflow-hidden rounded-md max-w-sm p-2 min-h-[500px] flex flex-col"
-                >
-                    <div>
-                        <h3 className="text-left pl-8 pb-4 pt-2 text-xl">
-                            Greeting App
-                        </h3>
-                    </div>
+            <div
+              id="partnerCard"
+              className="bg-[#1c1c1c] text-gray-50 overflow-hidden rounded-md max-w-m p-2 min-h-[500px] flex flex-col"
+            >
+              <div>
+                <h3 className="text-left pl-8 pb-4 pt-2 text-xl">
+                  Greeting App
+                </h3>
+              </div>
 
-                    <div className="flex items-center justify-center bg-[#2a2a2a] min-h-[200px]">
+              <div className="flex items-center justify-center bg-[#2a2a2a] min-h-[200px]">
 
-                            
-                             <img
-                                    src="https://media.istockphoto.com/photos/hand-is-turning-a-dice-and-changes-the-word-meet-to-greet-picture-id1084115310?k=20&m=1084115310&s=612x612&w=0&h=TwrnLk7i0jdfixAxbJdd8_LF9ZOnkvM-1DGn-_VELHA="
-                                    alt="EasyCode"
-                                    className="w-100 object-cover"
-                                />
 
-                    </div>
-                    <div className="grid grid-cols-4">
-                        <div className="p-4 pr-0 text-lg col-span-3">
-                                <h4 className="font-bold">
-                                 Current Greetings:
-                                </h4>
+                <img
+                  src="https://media.istockphoto.com/photos/hand-is-turning-a-dice-and-changes-the-word-meet-to-greet-picture-id1084115310?k=20&m=1084115310&s=612x612&w=0&h=TwrnLk7i0jdfixAxbJdd8_LF9ZOnkvM-1DGn-_VELHA="
+                  alt="EasyCode"
+                  className="w-100 object-cover"
+                />
 
-                                <p>{greet}</p>
-                        </div>
-                    
-                    </div>
+              </div>
+              <div className="grid grid-cols-6">
+                <div className="p-4 pr-0 text-lg col-span-4">
+                  <h4 className="font-bold">
+                    Current Greetings:
+                  </h4>
 
-                    
+                  <p>{greet}</p>
                 </div>
 
+              </div>
+              <div>
+                <form className="m-4 flex">
+                  <input className="rounded-l-lg p-4 border-t mr-0 border-b border-l text-gray-800 border-gray-200 bg-white" placeholder="Enter new greet" />
+                  <button className="px-8 rounded-r-lg bg-yellow-400  text-gray-800 font-bold p-4 uppercase border-yellow-500 border-t border-b border-r">Set Greet</button>
+                </form>
+              </div>
+
+            </div>
+
+          </div>
         </div>
-</div>
       )
-      
+
 
       }
     </main>
@@ -220,7 +225,7 @@ function Main() {
 
 function SignMsg() {
   const [msg, setMsg] = useState('Dapp Starter')
-  
+
   const { data, isError, isLoading, isSuccess, signMessage } = useSignMessage({
     message: msg,
   })
