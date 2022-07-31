@@ -71,7 +71,8 @@ function Main() {
   console.log(data.contractAddress);
 
   async function setGreetings() {
-
+    await contract.setGreeting(currentValue);
+    checkIfWalletIsConnected();
   }
 
   function handleChange(evt) {
@@ -224,7 +225,9 @@ function Main() {
                   <input value={currentValue}
                     onChange={(evt) => handleChange(evt)}
                     className="rounded-l-lg p-4 border-t mr-0 border-b border-l text-gray-800 border-gray-200 bg-white" placeholder="Enter new greet" />
-                  <button className="px-8 rounded-r-lg bg-yellow-400  text-gray-800 font-bold p-4 uppercase border-yellow-500 border-t border-b border-r">Set Greet</button>
+                  <button
+                   onClick={()=> setGreetings()}
+                   className="px-8 rounded-r-lg bg-yellow-400  text-gray-800 font-bold p-4 uppercase border-yellow-500 border-t border-b border-r">Set Greet</button>
                 </form>
               </div>
 
