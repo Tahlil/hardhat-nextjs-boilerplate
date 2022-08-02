@@ -56,11 +56,16 @@ function Main() {
     } else {
       console.log('No Wallet found. Connect Wallet')
     }
+    await window.ethereum.enable();
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
-    console.log("Signer", signer);
+  
 
     contract = Greeter__factory.connect(data.contractAddress, signer);
+    console.log("Get method:");
+    
+    console.log(contract);
+    
     console.log(await contract.greet());
     setgreet(await contract.greet() as string);
   }
@@ -70,9 +75,18 @@ function Main() {
   }, [])
   console.log(data.contractAddress);
 
-  async function setGreetings() {
-    await contract.setGreeting(currentValue);
+  async function setGreetings(evt) {
+    evt.preventDefault();
+    
     checkIfWalletIsConnected();
+    console.log("Set greeting");
+    
+    console.log("Set method:");
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    contract = Greeter__factory.connect(data.contractAddress, signer);
+    await contract.setGreeting(currentValue.toString(), {gasLimit: 200000});
+    
   }
 
   function handleChange(evt) {
@@ -226,7 +240,7 @@ function Main() {
                     onChange={(evt) => handleChange(evt)}
                     className="rounded-l-lg p-4 border-t mr-0 border-b border-l text-gray-800 border-gray-200 bg-white" placeholder="Enter new greet" />
                   <button
-                   onClick={()=> setGreetings()}
+                   onClick={setGreetings}
                    className="px-8 rounded-r-lg bg-yellow-400  text-gray-800 font-bold p-4 uppercase border-yellow-500 border-t border-b border-r">Set Greet</button>
                 </form>
               </div>
