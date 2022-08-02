@@ -22,7 +22,8 @@ contract Greeter {
         return greeting;
     }
 
-    function setGreeting(string memory _greeting) public onlyOwner {
+    function setGreeting(string memory _greeting) public onlyOwner payable{
+        require(msg.value > 10000, "Not enough paid");
         console.log("Changing greeting from '%s' to '%s'", greeting, _greeting);
         greeting = _greeting;
     }
