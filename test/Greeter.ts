@@ -3,7 +3,7 @@ import { anyValue } from "@nomicfoundation/hardhat-chai-matchers/withArgs";
 import { expect } from "chai";
 import { ethers, waffle} from 'hardhat';
 import GreeterArtifact from '../artifacts/contracts/Greeter.sol/Greeter.json';
-import {Greeter} from '../typechain/Greeter';
+import {Greeter} from '../frontend/src/typechain/Greeter';
 
 const {deployContract} = waffle;
 
