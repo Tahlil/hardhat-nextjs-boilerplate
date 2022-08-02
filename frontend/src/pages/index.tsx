@@ -85,8 +85,9 @@ function Main() {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     contract = Greeter__factory.connect(data.contractAddress, signer);
-    await contract.setGreeting(currentValue.toString(), {gasLimit: 200000});
-    
+    let tx = await contract.setGreeting(currentValue.toString(), {from: signer.getAddress(), gasLimit: 200000});
+    await tx.wait();
+    setgreet(await contract.greet());
   }
 
   function handleChange(evt) {
