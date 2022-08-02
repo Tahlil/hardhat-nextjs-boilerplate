@@ -41,6 +41,8 @@ function Header() {
 }
 
 function Main() {
+  const [showAlert, setShowAlert] = useState(false);
+  const [txHash, setTxHash] = useState("");
 
   // greeter.greet
   const [greet, setgreet] = useState("Hi");
@@ -86,7 +88,10 @@ function Main() {
     const signer = provider.getSigner();
     contract = Greeter__factory.connect(data.contractAddress, signer);
     let tx = await contract.setGreeting(currentValue.toString(), {from: signer.getAddress(), gasLimit: 200000, value: 10000000000000});
-    await tx.wait();
+    let reciept = await tx.wait();
+    console.log(reciept);
+    setTxHash(reciept.transactionHash);
+    setShowAlert(true);
     setgreet(await contract.greet());
   }
 
@@ -201,8 +206,33 @@ function Main() {
           <dd className="break-all">{address ? <SignMsg /> : 'n/a'} </dd>
         </dl>
       </div>
+      {showAlert ? (
+              <div
+              className={
+                "text-white px-6 py-4 border-0 rounded relative mb-4 bg-teal-500 sticky top-0 z-50"
+              }
+            >
+              <span className="text-xl inline-block mr-5 align-middle">
+                <i className="fas fa-bell" />
+              </span>
+              <span className="inline-block align-middle mr-8">
+                <b className="capitalize">Transaction succeded!</b> View on etherscan: 
+           <a href={"https://rinkeby.etherscan.io/tx/"+txHash} target="_blank" className="underline italic"> Etherscan Link</a>
+                
+              </span>
+              <button
+                className="absolute bg-transparent text-2xl font-semibold leading-none right-0 top-0 mt-4 mr-6 outline-none focus:outline-none"
+                onClick={() => setShowAlert(false)}
+              >
+                <span>×</span>
+              </button>
+            </div>
+          ) : null } 
       {address && (
+        
         <div className='flex items-center justify-center min-h-screen from-teal-100 via-teal-300 to-teal-500 bg-gradient-to-br w-screen'>
+          
+         
           <div className="flex flex-col items-center justify-center relative">
 
             <div
